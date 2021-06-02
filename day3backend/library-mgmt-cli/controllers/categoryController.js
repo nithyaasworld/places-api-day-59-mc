@@ -2,10 +2,9 @@ const Category = require('../models/category');
 const readLineSync = require('readline-sync');
 
 const printAllCategories = async () => {
-    console.log('inside print all categories');
     let categories = await Category.find();
     console.log('-------');
-    categories.forEach((category) => console.log('\n', category.name));
+    categories.forEach((category) => console.log(category.name));
     console.log('-------');
 }
 
@@ -19,10 +18,10 @@ const removeCategory = async () => {
     let response = readLineSync.question("What is the name of category, you want to delete? ");
     let itemToDelete = await Category.findOne({ name: response });
     if (itemToDelete === null) {
-        console.log('Category not found!');
+        console.log('\nCategory not found!');
     } else {
         await itemToDelete.remove();
-        console.log(`Category ${response} removed successfully`);
+        console.log(`\nCategory ${response} removed successfully`);
     }
 }
 module.exports = { printAllCategories, addCategory, removeCategory };

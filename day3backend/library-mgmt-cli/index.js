@@ -6,13 +6,12 @@ const bookController = require('./controllers/bookController');
 let userName = readLineSync.question('What is your name? ');
 console.log('Hi ' + userName + '!');
 
-mongoose.connect('mongodb://127.0.0.1:27017/library', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://127.0.0.1:27017/library', { useNewUrlParser: true, useUnifiedTopology: true , useCreateIndex: true})
     .then(()=> showOptions())
     .catch(err => console.log(err));
-let db = mongoose.connection;
 
 function displayOptions() {
-    console.log("Welcom to McLaren Library \n\n");
+    console.log("\nWelcome to McLaren Library");
     console.log("Here are few things you can do: ");
     console.log("1. See all categories");
     console.log("2. Add a new category");
@@ -25,8 +24,7 @@ function displayOptions() {
 }
 async function showOptions() {
     displayOptions();
-    let userChoice = readLineSync.question("Pick an operation to perform (1-3): ");
-    console.log(userChoice);
+    let userChoice = readLineSync.question("Pick an operation to perform (1-8): ");
     switch (userChoice) {
         case "1":
             await categoryController.printAllCategories();
@@ -48,7 +46,9 @@ async function showOptions() {
             await bookController.addBook(bookTitle, bookPrice, bookCategory, bookAuthor);
             break;
         case '6':
-            //Todo
+            let bookToDelete = readLineSync.question("Enter the Name of the book you want to delete: ");
+            await bookController.removeBook(bookToDelete);
+            break;
         case '7':
             let searchTitle = readLineSync.question("What is the name of the Book, you want to search? ");
             await bookController.searchBook(searchTitle);
@@ -58,16 +58,4 @@ async function showOptions() {
             return;
     }
     showOptions();
-    // await mongoose.connect('mongodb://127.0.0.1:27017/library', { useNewUrlParser: true, useUnifiedTopology: true });
-    // let db = mongoose.connection;
-    // let data = await db.collection('sample').find({}).toArray();
-    // console.log(data);
-    // db.close();
-    // let response = readLineSync.question('What is the name of the category? ');
-    // const category = new Category({ name: response });
-    // await category.save();
-
-    // let categories = await db.collection('car').find().toArray();
-    // console.log(categories);
-    // db.close();
 }
