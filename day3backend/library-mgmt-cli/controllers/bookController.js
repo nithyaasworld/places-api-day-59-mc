@@ -1,12 +1,27 @@
 const CategoryModel = require("../models/category");
 const categoryController = require("./categoryController");
 const BookModel = require("../models/book");
+const greenColor = "\x1b[32m";
+const resetColor = "\x1b[0m";
 
 const printAllBooks = async () => {
-  let books = await BookModel.find({});
-  console.log("-------");
-  books.forEach((book) => console.log(book.title));
-  console.log("-------");
+  let books = await BookModel.find({}).populate("category");
+  console.log(greenColor + "=============================" + resetColor);
+  books.forEach((book) =>
+    console.error(
+      greenColor +
+        "Title: " +
+        book.title +
+        "\nCategory: " +
+        book.category.name +
+        "\nAuthors: " +
+        book.author.join(", ") +
+        "\nPrice: " +
+        book.price +
+      "\n=============================" +
+      resetColor
+    )
+  );
 };
 const addBook = async (title, price, bookCategory, author) => {
   let category = await CategoryModel.findOne({ name: bookCategory });
@@ -20,52 +35,49 @@ const addBook = async (title, price, bookCategory, author) => {
     await book
       .save()
       .then((data) =>
-        console.log("Following book has been added successfully:", data)
+        console.log(greenColor + "\nFollowing book has been added successfully:" + data + resetColor)
       );
   } else {
-    console.log(
-      "There is no such category. These are the available valid categories. Please try again with one of these."
+    console.log(greenColor +
+      "\nThere is no such category. These are the available valid categories. Please try again with one of these." + resetColor
     );
     await categoryController.printAllCategories();
   }
 };
 const searchBook = async (title) => {
   if (!title || title.length === 0) {
-    console.log(
-      "\nBook title is missing. Please try again with some Book title."
+    console.log(greenColor + 
+      "\nBook title is missing. Please try again with some Book title." + resetColor
     );
     return;
   }
   let re = new RegExp(title, "i");
-  await BookModel.find({ title: re }, (err, docs) => {
-    if (err) {
-      console.log(err);
-    } else {
+  await BookModel.find({ title: re })
+    .then((docs) => {
       if (!docs || docs.length === 0) {
-        console.log("No matching records found.");
+        console.log(greenColor + "\nNo matching records found." + resetColor);
       } else {
-        console.log("Matching docs are", docs);
+        console.log(greenColor + "\nMatching docs are" + docs + resetColor);
       }
-    }
-  });
+    })
+    .catch((err) => console.log(err));
 };
 const removeBook = async (bookToDelete) => {
   if (!bookToDelete || bookToDelete.length === 0) {
     console.log(
       "\nBook title is missing. Please try again with some Book title."
     );
-  
   } else {
-      await BookModel.findOne({ title: bookToDelete }, (err, doc) => {
-        if (err) {
-          console.log(err);
-        } else if (!doc || doc.length === 0) {
-          console.log(`\nBook with title ${bookToDelete} doesn't exist.`);
+    await BookModel.findOne({ title: bookToDelete })
+      .then((doc) => {
+        if (!doc || doc.length === 0) {
+          console.log(greenColor + `\nBook with title ${bookToDelete} doesn't exist.` + resetColor);
         } else {
           doc.remove();
-          console.log(`\nBook ${bookToDelete} deleted successfully`);
+          console.log(greenColor + `\nBook ${bookToDelete} deleted successfully` + resetColor);
         }
-      });
+      })
+      .catch((err) => console.log(err));
   }
 };
 module.exports = { printAllBooks, addBook, searchBook, removeBook };
