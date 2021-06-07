@@ -1,22 +1,15 @@
 const mongoose = require("mongoose");
-const BookSchema = new mongoose.Schema({
-  title: {
+const URLShortenerSchema = new mongoose.Schema({
+  url: {
     type: String,
     unique: true,
     required: true,
     },
-    price: {
-        type: Number,
+    shortener: {
+        type: string,
+        unique: true,
         required: true,
     },
-    category: {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: 'Category',
-    },
-    author: {
-        type: [String],
-        required: true,
-    }
 }, {timestamps: true});
 
 const BookModel = new mongoose.model('Book', BookSchema);
