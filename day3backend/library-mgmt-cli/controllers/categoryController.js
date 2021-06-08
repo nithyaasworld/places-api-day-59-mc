@@ -6,9 +6,10 @@ const resetColor = "\x1b[0m";
 
 const printAllCategories = async () => {
     let categories = await Category.find();
-    console.log('-------');
-    categories.forEach((category) => console.log(greenColor + category.name + resetColor));
-    console.log('-------');
+    return categories;
+    // console.log('-------');
+    // categories.forEach((category) => console.log(greenColor + category.name + resetColor));
+    // console.log('-------');
 }
 
 const addCategory = async () => {

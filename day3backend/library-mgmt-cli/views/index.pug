@@ -1,0 +1,14 @@
+head 
+    title='McLaren Library'
+    link(rel="stylesheet" href="style.css")
+body 
+    h1='Welcome to McLaren Library' 
+    div(class="bg-red")
+        p Hello, there!
+    h2='List of Books'
+    ul(class="book-card-container")  
+        each val in books
+            div(class='book-card')
+                h3= val.title
+                p= val.author
+    a(href='/books/add-new' class='add-button') Add Books

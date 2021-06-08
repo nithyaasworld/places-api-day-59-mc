@@ -1,0 +1,20 @@
+head 
+    title='McLaren Library'
+    link(rel="stylesheet" href="/style.css")
+body 
+    h1="Add New Book Form"
+    form(method="post" action="/books/add-new")
+        label(for="inputBookTitle") Book Title: 
+        input(type="text" name="inputBookTitle")
+
+        label(for="inputBookPrice") Price (USD): 
+        input(type="number" name="inputBookPrice")
+
+        label(for="inputAuthors") Authors (comma-separated):
+        input(type="text" name="inputAuthors") 
+
+        lable(for="inputCategory") Category: 
+        select(name="inputCategory")
+            for category in categories
+                option(value=`${category}`) #{category}
+        button(type="submit") Add Book

@@ -6,22 +6,23 @@ const resetColor = "\x1b[0m";
 
 const printAllBooks = async () => {
   let books = await BookModel.find({}).populate("category");
-  console.log(greenColor + "=============================" + resetColor);
-  books.forEach((book) =>
-    console.error(
-      greenColor +
-        "Title: " +
-        book.title +
-        "\nCategory: " +
-        book.category.name +
-        "\nAuthors: " +
-        book.author.join(", ") +
-        "\nPrice: " +
-        book.price +
-      "\n=============================" +
-      resetColor
-    )
-  );
+  return books;
+  // console.log(greenColor + "=============================" + resetColor);
+  // books.forEach((book) =>
+  //   console.error(
+  //     greenColor +
+  //       "Title: " +
+  //       book.title +
+  //       "\nCategory: " +
+  //       book.category.name +
+  //       "\nAuthors: " +
+  //       book.author.join(", ") +
+  //       "\nPrice: " +
+  //       book.price +
+  //     "\n=============================" +
+  //     resetColor
+  //   )
+  // );
 };
 const addBook = async (title, price, bookCategory, author) => {
   let category = await CategoryModel.findOne({ name: bookCategory });
