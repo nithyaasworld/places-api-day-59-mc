@@ -2,20 +2,25 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const cors = require('cors');
 // const logger = require('./logger');
 // app.use(/.*/, logger);
 
 //importing routes here
 const bookRouter = require('./routes/books');
+const authRouter = require('./routes/auth');
 
 //importing controllers
 const bookController = require('./controllers/bookController');
 
 app.use(morgan('dev'));
+app.use(cors());
+app.use(express.json());
 app.set('view engine', 'pug');
 app.use(express.static('static'));
 app.use(express.urlencoded());
 app.use('/books', bookRouter);
+app.use('/auth', authRouter);
 
 mongoose.connect('mongodb://127.0.0.1:27017/library', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
     .then(() => console.log("connected to mongoose"))

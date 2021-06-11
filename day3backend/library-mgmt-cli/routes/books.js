@@ -8,7 +8,10 @@ const bookController = require('../controllers/bookController');
 
 router
   .route("/")
-  .get((req, res) => res.send("List of books"))
+  .get( async(req, res) => {
+    let books = await bookController.printAllBooks();
+    res.json(books);
+  })
   .post((req, res) => res.send("Adding new book"));
 
 let bookHandler1 = (req, res, next) => {
@@ -41,6 +44,12 @@ router.post('/add-new', async (req, res) => {
   let author = req.body.inputAuthors;
   await bookController.addBook(title, price, bookCategory, author);
   res.redirect('/');
+})
+
+router.delete('/:bookID', async (req, res) => {
+  let result = await bookController.removeBookByID(req.params.bookID);
+  console.log('result is: ', result);
+  res.send(result);
 })
 
 router.get("/:bookID", [bookHandler1, booksHandler2]);

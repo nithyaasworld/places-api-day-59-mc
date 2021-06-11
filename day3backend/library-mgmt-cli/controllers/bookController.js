@@ -36,19 +36,28 @@ const addBook = async (title, price, bookCategory, author) => {
     await book
       .save()
       .then((data) =>
-        console.log(greenColor + "\nFollowing book has been added successfully:" + data + resetColor)
+        console.log(
+          greenColor +
+            "\nFollowing book has been added successfully:" +
+            data +
+            resetColor
+        )
       );
   } else {
-    console.log(greenColor +
-      "\nThere is no such category. These are the available valid categories. Please try again with one of these." + resetColor
+    console.log(
+      greenColor +
+        "\nThere is no such category. These are the available valid categories. Please try again with one of these." +
+        resetColor
     );
     await categoryController.printAllCategories();
   }
 };
 const searchBook = async (title) => {
   if (!title || title.length === 0) {
-    console.log(greenColor + 
-      "\nBook title is missing. Please try again with some Book title." + resetColor
+    console.log(
+      greenColor +
+        "\nBook title is missing. Please try again with some Book title." +
+        resetColor
     );
     return;
   }
@@ -72,13 +81,52 @@ const removeBook = async (bookToDelete) => {
     await BookModel.findOne({ title: bookToDelete })
       .then((doc) => {
         if (!doc || doc.length === 0) {
-          console.log(greenColor + `\nBook with title ${bookToDelete} doesn't exist.` + resetColor);
+          console.log(
+            greenColor +
+              `\nBook with title ${bookToDelete} doesn't exist.` +
+              resetColor
+          );
         } else {
           doc.remove();
-          console.log(greenColor + `\nBook ${bookToDelete} deleted successfully` + resetColor);
+          console.log(
+            greenColor +
+              `\nBook ${bookToDelete} deleted successfully` +
+              resetColor
+          );
         }
       })
       .catch((err) => console.log(err));
   }
 };
-module.exports = { printAllBooks, addBook, searchBook, removeBook };
+const removeBookByID = async (bookID) => {
+  let result;
+  if (!bookID || bookID.length === 0) {
+    result = "Book title is missing. Please try again with valid Book ID.";
+  } else {
+    await BookModel.findOne({ _id: bookID })
+      .then(async (doc) => {
+        console.log("doc is: ", doc);
+        if (!doc || doc.length === 0) {
+          console.log(`Book with ID: ${bookID} doesn't exist in DB`);
+          result = `Book with ID: ${bookID} doesn't exist in DB`;
+        } else {
+          await doc
+            .remove()
+            .then(() => {
+              console.log("Book with ID ${bookID} is deleted successfully");
+              result = `Book with ID ${bookID} is deleted successfully`;
+            })
+            .catch((err) => (result = err));
+        }
+      })
+      .catch((err) => (result = err));
+  }
+  return result;
+};
+module.exports = {
+  printAllBooks,
+  addBook,
+  searchBook,
+  removeBook,
+  removeBookByID,
+};
