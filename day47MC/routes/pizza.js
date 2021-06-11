@@ -10,9 +10,10 @@ router.get('/', async (req, res) => {
     res.send(result);
 })
 
-router.post('/pizza', async (req, res) => {
+router.post('/', async (req, res) => {
+    console.log(req.body);
     let result;
-    await pizzaController.addAPizza().then((data) => result = data);
+    await pizzaController.addAPizza(req.body).then((data) => result = data);
     res.send(result);
 })
 module.exports = router;

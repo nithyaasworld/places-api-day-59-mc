@@ -5,7 +5,7 @@ const getAllPizzas = async () => {
   return pizzas;
 };
 
-const addAPizza = async (name, price, ingredients) => {
+const addAPizza = async ({ name, price, ingredients }) => {
   const pizza = new PizzaModel({
     name,
     price,

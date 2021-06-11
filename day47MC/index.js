@@ -17,12 +17,6 @@ app.use('/pizzas', pizzaRouter);
 mongoose.connect('mongodb://127.0.0.1:27017/pizza', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
     .then(() => console.log("connected to mongoose"))
     .catch(err => console.log(err));
-
-app.get('/', async (req, res) => {
-        let pizza = await pizzaController.getAllPizzas();
-        console.log(pizza);
-        res.send(pizza);
-    })
     
     app.all(/.*/, (req, res) => {
         res.statusCode = 404;
