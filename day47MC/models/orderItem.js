@@ -3,6 +3,7 @@ const OrderItemSchema = new mongoose.Schema({
     pizza: {
         type: mongoose.SchemaTypes.ObjectId,
         required: true,
+        ref: 'Pizza',
     }, 
     quantity: {
         type: Number,
