@@ -25,4 +25,4 @@ const addAPizza = async ({ name, price, ingredients }) => {
     });
   return result;
 };
-module.exports = {getAllPizzas, addAPizza}
+module.exports = { getAllPizzas, addAPizza };

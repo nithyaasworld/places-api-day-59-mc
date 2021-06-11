@@ -6,16 +6,16 @@ router.get("/", async (req, res) => {
   let result;
   await orderItemsController
     .getAllOrderItems()
-    .then((data) => result = data)
-    .catch((err) => resul = err);
+    .then((data) => (result = data))
+    .catch((err) => (resul = err));
   res.send(result);
 });
 router.get("/:id", async (req, res) => {
   let result;
   await orderItemsController
     .getOrderItemsByID(req.params.id)
-    .then((data) => result=data)
-    .catch((err) => result=data);
+    .then((data) => (result = data))
+    .catch((err) => (result = data));
   res.send(result);
 });
 router.post("/", async (req, res) => {
