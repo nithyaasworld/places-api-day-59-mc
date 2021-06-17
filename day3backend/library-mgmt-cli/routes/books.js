@@ -2,9 +2,6 @@ const express = require("express");
 const router = express.Router();
 const categoryController = require('../controllers/categoryController');
 const bookController = require('../controllers/bookController');
-// const express = require('express');
-// const app = express();
-// app.use(express.static('static'));
 
 router
   .route("/")

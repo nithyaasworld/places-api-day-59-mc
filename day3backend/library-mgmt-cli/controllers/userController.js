@@ -2,7 +2,7 @@ const UserModel = require("../models/users");
 const bcrypt = require('bcrypt');
 const defaultPic = '/images/avatar.png'
 
-const addUser = async ({ userName, email, password, profilePic }) => {
+const addUser = async ({ name, email, password, profilePic }) => {
     if (!profilePic) {
         profilePic = defaultPic;
     }
@@ -13,7 +13,7 @@ const addUser = async ({ userName, email, password, profilePic }) => {
     //insert bcrypt 
     let hash = await bcrypt.hash(password, 10);
     
-    let user = new UserModel({ name: userName, email, password: hash, profilePic })
+    let user = new UserModel({ name, email, password: hash, profilePic })
     let result = {};
     await user.save().then((res) => {
         result["status"] = true;
@@ -24,12 +24,24 @@ const addUser = async ({ userName, email, password, profilePic }) => {
     });
     return result;
 };
-
-const getUsers =  async () => {
-    let users = await UserModel.find();
-    return users;
+const loginUser = async({email, password}) =>{
+    try{
+        console.log("email is: ", email);
+        let user = await UserModel.findOne({email});
+        console.log('user is: ', user);
+        if(user === null){
+            return {status: false, result: {message: "Invalid Email"}}
+        }
+        console.log(user);
+        let result = await bcrypt.compare(password, user.password);
+        if(!result){
+            return {status: false, result: {message: "Invalid Password"}};
+        }
+        return {status: true, result: user}
+    }catch (error){
+        return {status: false, result: {message: "Error: " + error.message}};
+    }
 }
-
 module.exports = {
- addUser
+ addUser, loginUser
 };
