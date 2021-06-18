@@ -53,7 +53,7 @@ let validateRequest = (req, res, next) => {
     }
 }
 
-app.use('/books', bookRouter);
+app.use('/books', validateRequest, bookRouter);
 app.use('/auth', authRouter);
 app.use('/categories', categoryRouter);
 
