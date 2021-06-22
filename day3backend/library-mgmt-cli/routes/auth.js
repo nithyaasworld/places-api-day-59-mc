@@ -30,7 +30,7 @@ router.post("/signup", multipart.single("profilePic"), async (req, res) => {
     let token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
       expiresIn: process.env.ACCESS_TOKEN_EXPIRE_TIME,
     });
-    console.log("access token is: ", access_token);
+    console.log("access token is: ", token);
     let refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
       expiresIn: process.env.REFRESH_TOKEN_EXPIRE_TIME,
     });
@@ -45,9 +45,16 @@ router.post("/signup", multipart.single("profilePic"), async (req, res) => {
 });
 
 router.post("/token", async (req, res) => {
-  const { token, email } = req.body;
-  if (!token || !refreshTokens.includes(token)) {
-    res.send(403);
+    const { token, email } = JSON.parse(req.body.body);
+    console.log(req.body);
+    console.log(req.body.body);
+   
+    if (!token) {
+        res.status(400).send("Token  not found");
+    } else if (refreshTokens.includes(token)) {
+        res.status(403).send("RefreshToken is not valid");
+//   if (!token || !refreshTokens.includes(token)) {
+//     res.send(403);
   } else {
     try {
       let payload = { email: email };
@@ -66,7 +73,8 @@ router.post("/token", async (req, res) => {
 router.post("/login", async (req, res) => {
   console.log("reached the router");
   console.log(req.body);
-  let result = await userController.loginUser(req.body);
+    let result = await userController.loginUser(req.body);
+    console.log(result);
   if (result.status) {
     console.log(result.result);
     let payload = {
